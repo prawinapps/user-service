@@ -35,7 +35,7 @@ Parameters:
     Description: The priority for the routing rule added to the load balancer.
   DesiredCount:
     Type: Number
-    Default: 2
+    Default: 3
     Description: How many copies of the service task to run
   Role:
     Type: String

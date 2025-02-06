@@ -21,7 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.appsdeveloperblog.photoapp.api.users.service.UsersService;
 
-@Configuration
+//@Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)  
 public class WebSecurity {

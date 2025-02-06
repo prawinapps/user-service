@@ -35,7 +35,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::183295410578:role/github-actions-cloudformation-deploy-role
           role-session-name: DeployInfra
-          aws-region: us-east-2
+          aws-region: ap-south-1
 
       - name: Retrieve default VPC ID and public subnets
         id: vpc
@@ -89,7 +89,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::183295410578:role/github-actions-cloudformation-deploy-role
           role-session-name: DeployJavaApp
-          aws-region: us-east-2
+          aws-region: ap-south-1
 
       - name: Login ECR
         id: login-ecr

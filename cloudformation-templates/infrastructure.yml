@@ -25,7 +25,7 @@ Resources:
   ImageRepository:
     Type: AWS::ECR::Repository
     Properties:
-      RepositoryName: test
+      RepositoryName: !Sub "github-actions-${EnvironmentName}"
 
   ECSCluster:
     Type: AWS::ECS::Cluster

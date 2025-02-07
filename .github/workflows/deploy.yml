@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - master
-      - deploy-test
+      - dev
     #   can remove the deploy test branch after merging to main
 
 name: Deploy
@@ -106,6 +106,29 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
 
+      - name: Determine environment file
+        id: select-env-file
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+            echo "ENV_FILE=environments/prod.env" >> $GITHUB_ENV
+          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            echo "ENV_FILE=environments/dev.env" >> $GITHUB_ENV
+          else 
+            echo "ENV_FILE=environments/prod.env" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Load environment variables from file
+        id: load-env
+        run: |
+          while IFS='=' read -r key value; do
+            # Skip empty lines and comments
+            if [[ ! -z "$key" && "$key" != \#* ]]; then
+              echo "$key=$value" >> $GITHUB_ENV
+              echo "$key=$value" >> $GITHUB_OUTPUT
+            fi
+          done < $ENV_FILE
+
       - name: Deploy ECS service with CloudFormation
         id: service-stack
         uses: aws-actions/aws-cloudformation-github-deploy@v1
@@ -116,7 +139,8 @@ jobs:
           parameter-overrides: >-
             EnvironmentName=${{ needs.deploy-infrastructure.outputs.env-name }},
             ServiceName=user-service,
-            ImageUrl=${{ steps.build-image.outputs.image }}
+            ImageUrl=${{ steps.build-image.outputs.image }},
+            DesiredCount=${{ steps.load-env.outputs.DESIRED_COUNT }}
 
       - name: Print service URL
         env:

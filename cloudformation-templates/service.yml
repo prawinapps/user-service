@@ -37,6 +37,10 @@ Parameters:
     Type: Number
     Default: 3
     Description: How many copies of the service task to run
+  MaximumPercent:
+    Type: Number
+    Default: 3
+    Description: How many copies of the service task to run      
   Role:
     Type: String
     Default: ""
@@ -90,7 +94,7 @@ Resources:
         Fn::ImportValue: !Sub ${EnvironmentName}:ClusterName
       LaunchType: FARGATE
       DeploymentConfiguration:
-        MaximumPercent: 200
+        MaximumPercent: !Ref "MaximumPercent"
         MinimumHealthyPercent: 75
       DesiredCount: !Ref "DesiredCount"
       NetworkConfiguration:

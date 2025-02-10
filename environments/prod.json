@@ -1,3 +1,4 @@
 {
-  "DesiredCount": 5
+  "DesiredCount": 1,
+  "MaximumPercent": 200
 }
